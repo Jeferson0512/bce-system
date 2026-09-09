@@ -196,7 +196,7 @@ implementada y verificada:
 | [x] | Crear componentes UI reutilizables | `apps/web/src/components/ui`, `feedback` y `tables`; typecheck/build validados |
 | [x] | Migrar dashboard | `apps/web/src/pages/DashboardPage.tsx`; typecheck/build validados |
 | [x] | Migrar operaciones | `apps/web/src/features/operaciones`; React Hook Form + Zod y typecheck/build validados |
-| [ ] | Migrar kiosco | Pendiente |
+| [x] | Migrar kiosco | `apps/web/src/features/kiosco/pages/KioscoPage.tsx`; búsqueda, stock, carrito y build validados |
 | [ ] | Migrar pagos | Pendiente |
 | [ ] | Migrar deudas | Pendiente |
 | [ ] | Migrar catálogos | Pendiente |
