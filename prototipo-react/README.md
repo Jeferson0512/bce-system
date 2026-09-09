@@ -31,6 +31,8 @@ publicarse mediante revisión antes de integrarse a `main`.
 ## Alcance actual
 
 - React SPA con Vite.
+- React Router para navegación por URL.
+- TypeScript estricto y tipos de dominio iniciales.
 - TailAdmin Free como dirección visual.
 - Datos demo locales para validar navegación y componentes.
 - Sin SQLite, Electron ni API todavía; se incorporarán en sus fases.

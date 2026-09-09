@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
+import { BrowserRouter, useLocation, useNavigate } from 'react-router-dom';
 import {
   Archive, BarChart3, Bell, BookOpen, Box, ChevronDown, CircleDollarSign,
   ClipboardList, CreditCard, FileText, Grid2X2, LayoutDashboard, Menu,
@@ -10,8 +11,22 @@ import { navigation } from './config/navigation';
 import { operations, stats } from './data/demoData';
 
 function App() {
-  const [page, setPage] = useState('dashboard');
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [page, setPage] = useState(() => location.pathname.slice(1) || 'dashboard');
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const changePage = (nextPage) => {
+    setPage(nextPage);
+    navigate(nextPage === 'dashboard' ? '/' : `/${nextPage}`);
+    setSidebarOpen(false);
+  };
+
+  useEffect(() => {
+    const routePage = location.pathname.slice(1) || 'dashboard';
+    if (navigation.some((item) => item.id === routePage) && routePage !== page) {
+      setPage(routePage);
+    }
+  }, [location.pathname, page]);
 
   return (
     <div className="app variant-tailadmin">
@@ -24,7 +39,7 @@ function App() {
         <div className="workspace-label">MENÚ PRINCIPAL</div>
         <nav>
           {navigation.map(({ id, label, icon: Icon }) => (
-            <button key={id} className={`nav-item ${page === id ? 'active' : ''}`} onClick={() => { setPage(id); setSidebarOpen(false); }}>
+            <button key={id} className={`nav-item ${page === id ? 'active' : ''}`} onClick={() => changePage(id)}>
               <Icon size={18} /><span>{label}</span>{id === 'pagos' && <span className="nav-badge">3</span>}
             </button>
           ))}
@@ -48,7 +63,7 @@ function App() {
         </header>
         <div className="content">
           <div className="prototype-banner"><span className="dot" /> BCE System v2 · <strong>TailAdmin Free + Tailwind</strong><span className="banner-note">Base oficial de la SPA React</span></div>
-          {page === 'dashboard' ? <Dashboard setPage={setPage} /> : <ModulePage page={page} setPage={setPage} />}
+          {page === 'dashboard' ? <Dashboard setPage={changePage} /> : <ModulePage page={page} setPage={changePage} />}
         </div>
       </main>
     </div>
@@ -86,4 +101,8 @@ function ModulePage({ page, setPage }) {
   </>;
 }
 
-createRoot(document.getElementById('root')).render(<App />);
+createRoot(document.getElementById('root')).render(
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>,
+);
