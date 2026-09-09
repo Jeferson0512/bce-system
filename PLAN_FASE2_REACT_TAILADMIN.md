@@ -455,6 +455,472 @@ El Dashboard podrá marcarse como `[x]` únicamente cuando:
 - Exista una prueba E2E de navegación y consulta del Dashboard.
 - Se valide escritorio, pantalla reducida y navegación por teclado.
 
+### 8.3 — Especificaciones funcionales de las demás pantallas
+
+Esta sección centraliza el contrato funcional de las pantallas que deben
+reconstruirse desde `legacy-v1/` hacia React. La v2 puede modernizar el
+layout, los componentes y la navegación, pero no puede eliminar campos,
+cálculos, filtros, acciones o relaciones de negocio existentes en la v1.
+
+Una pantalla solo podrá marcarse como migrada cuando cumpla su contrato de
+datos, comportamiento, estados y pruebas. Crear una ruta o mostrar una tabla
+demo no equivale a completar la migración.
+
+#### 8.3.1 — Nueva operación
+
+**Referencia v1:** `legacy-v1/js/views/operaciones.js`, `DB.precios`,
+`DB.salones`, `DB.profesores`, `DB.alumnos`, `DB.operaciones` y `DB.pagos`.
+
+**Objetivo:** registrar una operación completa, no solamente calcular un
+importe simple.
+
+Debe incluir:
+
+- Tipo de solicitante: profesor, alumno o dirección.
+- Selección de la persona concreta según el tipo.
+- Para alumnos:
+  - alumno registrado o nombre.
+  - encargo del profesor o uso personal.
+  - salón de destino.
+  - profesor que lo envió como referencia.
+- Para dirección:
+  - persona que ordena.
+  - persona que recoge.
+  - opción de usar la misma persona.
+- Modo de servicio y modo Kiosco.
+- Servicio o producto desde un catálogo activo.
+- Salón de destino o uso personal.
+- Cantidad.
+- Juegos/originales cuando aplique.
+- Precio unitario según tipo de solicitante.
+- Precio variable editable con validación.
+- Subtotal por ítem.
+- Pedido con múltiples ítems.
+- Modo de varios salones para repetir un servicio.
+- Fecha de operación.
+- Notas.
+- Pago inmediato, pago pendiente o sin pago.
+- Total del pedido.
+- Guardar operación.
+- Guardar y continuar.
+- Resumen del pedido antes de confirmar.
+
+Reglas:
+
+- No permitir guardar sin solicitante válido.
+- No permitir guardar sin al menos un ítem.
+- Cantidades enteras mayores que cero.
+- Precio mayor que cero.
+- No permitir servicios o productos inactivos.
+- Aplicar tarifa correspondiente a profesor, alumno o dirección.
+- El cobro debe conservar el contexto salón/tutor/persona.
+- La referencia debe generarse desde un correlativo.
+- La operación guardada debe quedar disponible para historial, pagos,
+  deudas y reportes.
+
+#### 8.3.2 — Registro por lote
+
+**Referencia v1:** `legacy-v1/js/views/lote.js`.
+
+**Objetivo:** registrar muchas operaciones de una misma fecha en una sola
+vista.
+
+Debe incluir pestañas para:
+
+- Profesores.
+- Alumnos.
+- Dirección.
+
+Cada fila debe permitir, según el tipo:
+
+- Persona.
+- Salón o uso personal.
+- Servicio.
+- Cantidad.
+- Precio.
+- Total de fila.
+- Eliminar fila.
+
+Debe incluir:
+
+- Fecha común del registro.
+- Agregar fila.
+- Contadores por pestaña.
+- Vista previa de operaciones que se crearán.
+- Total de operaciones.
+- Total monetario.
+- Guardar todo.
+- Mensajes de filas incompletas.
+- Prevención de duplicados o confirmación explícita cuando corresponda.
+
+El guardado debe crear operaciones individuales reutilizando el mismo caso de
+uso de Nueva operación; no debe duplicar reglas de cálculo.
+
+#### 8.3.3 — Historial y detalle de operación
+
+**Referencia v1:** `legacy-v1/js/views/historial.js`.
+
+La pantalla de historial debe incluir:
+
+- Búsqueda por solicitante, salón y servicio.
+- Filtro por tipo: profesor, alumno y dirección.
+- Filtros de fecha: todos, hoy, esta semana y este mes.
+- Tabla paginada.
+- Selector de cantidad por página.
+- Conteo de resultados.
+- Exportación CSV/Excel.
+- Exportación PDF/impresión.
+- Acción para ver detalle.
+- Acción para imprimir.
+- Estado vacío y estado sin resultados.
+
+Las columnas mínimas son:
+
+| Fecha/hora | Tipo | Solicitante | Servicios | Salones | Total | Acciones |
+|---|---|---|---|---|---|---|
+
+El detalle debe mostrar:
+
+- Referencia.
+- Fecha y hora.
+- Tipo y solicitante.
+- Profesor que envió, cuando aplique.
+- Quién ordena y quién recoge, para dirección.
+- Notas.
+- Tabla de ítems con servicio, salón, cantidad, precio unitario y subtotal.
+- Total.
+- Pagos asociados.
+- Estado de la operación.
+- Acción de impresión.
+- Anulación controlada con confirmación y motivo, si la regla lo permite.
+
+#### 8.3.4 — Pagos
+
+La v2 debe conservar el flujo de pago que la v1 usa desde operaciones y
+deudas, aunque lo exponga también como módulo independiente.
+
+Debe incluir:
+
+- Selección de operación o entidad.
+- Tipo de solicitante.
+- Importe.
+- Fecha.
+- Método: efectivo, Yape, Plin o transferencia.
+- Referencia o comprobante cuando corresponda.
+- Notas.
+- Estado: pendiente, validado o anulado.
+- Registro de pago.
+- Historial de pagos.
+- Detalle de pago.
+
+Reglas:
+
+- No aceptar importe cero o negativo.
+- No permitir pagar más que el saldo sin confirmación explícita.
+- Efectivo no requiere referencia.
+- Métodos digitales requieren referencia según configuración.
+- El pago debe actualizar el saldo de la persona y los indicadores del
+  Dashboard.
+- Dirección, profesor y alumno deben conservarse como entidades separadas.
+
+#### 8.3.5 — Deudas de profesores
+
+**Referencia v1:** `legacy-v1/js/views/deudas.js`, vista de profesores.
+
+Debe incluir:
+
+- Resumen de total generado.
+- Total pagado.
+- Saldo pendiente.
+- Conteo de profesores con deuda.
+- Filtros por estado y nivel.
+- Búsqueda.
+- Tabla de profesores.
+- Acción para abrir cuenta individual.
+- Acción para registrar pago.
+- Exportación.
+
+Columnas mínimas:
+
+| Profesor | Salón tutor | Nivel | Total | Pagado | Pendiente | Estado | Acción |
+|---|---|---|---:|---:|---:|---|---|
+
+El estado individual debe ser pendiente, parcial o pagado.
+
+El estado de cuenta debe mostrar operaciones, servicios, salones, pagos,
+saldo restante y acción de abono.
+
+#### 8.3.6 — Deudas de alumnos
+
+Debe conservar la misma lógica financiera de profesores, pero asociada al
+alumno y su salón:
+
+- Total generado.
+- Total pagado.
+- Pendiente.
+- Estado.
+- Nivel y salón.
+- Búsqueda y filtros.
+- Estado de cuenta.
+- Historial de operaciones.
+- Historial de pagos.
+- Registro de abono.
+- Exportación.
+
+No se debe mezclar el saldo de alumno con el del tutor o profesor. La regla
+de cobro debe quedar explícita en el dominio.
+
+#### 8.3.7 — Deudas de dirección
+
+Debe mostrar una cuenta consolidada de dirección con:
+
+- Operaciones de dirección.
+- Quién ordenó.
+- Quién recogió.
+- Fecha.
+- Servicios.
+- Notas.
+- Total generado.
+- Total pagado.
+- Saldo pendiente.
+- Historial de pagos.
+- Registro de pago.
+
+Debe distinguir entre operaciones pendientes, pagadas y anuladas.
+
+#### 8.3.8 — Kiosco y ventas
+
+El Kiosco debe funcionar como catálogo y como flujo de venta:
+
+- Productos activos.
+- Búsqueda por nombre, código y categoría.
+- Stock disponible.
+- Indicador de stock bajo.
+- Precio.
+- Cantidad.
+- Subtotal.
+- Carrito.
+- Total.
+- Asociación opcional a solicitante.
+- Pago.
+- Confirmación de venta.
+- Descuento de stock.
+- Historial de ventas.
+
+Reglas:
+
+- No vender más unidades que el stock.
+- No vender productos inactivos.
+- No completar una venta vacía.
+- Descontar stock únicamente al confirmar.
+- La venta debe ser visible en pagos y reportes.
+
+#### 8.3.9 — Reporte diario
+
+**Referencia v1:** `legacy-v1/js/views/reportes.js`, `viewReporteDiario`.
+
+Debe permitir seleccionar al menos hoy y ayer, además de una fecha concreta.
+
+Debe mostrar:
+
+- Total generado.
+- Total cobrado.
+- Saldo pendiente.
+- Cantidad de operaciones.
+- Servicios del día.
+- Distribución por tipo de solicitante.
+- Gráfico o resumen de servicios.
+- Tabla de detalle.
+
+Columnas mínimas:
+
+| Hora | Tipo | Solicitante | Servicios | Salones | Total |
+|---|---|---|---|---|---:|
+
+Debe permitir abrir el detalle de cada operación y exportar el resultado.
+
+#### 8.3.10 — Reporte por período
+
+Debe permitir:
+
+- Fecha inicial.
+- Fecha final.
+- Atajos: hoy, semana, mes y período anterior.
+- Tipo de solicitante.
+- Servicio.
+- Método de pago.
+- Estado.
+
+Debe mostrar:
+
+- Tendencia del período.
+- Total generado.
+- Total cobrado.
+- Pendiente.
+- Ranking de profesores.
+- Resumen por servicio con cantidad e importe.
+- Tabla completa de operaciones.
+- Exportación.
+
+Todos los cálculos deben utilizar los mismos repositorios que Dashboard,
+Historial, Pagos y Deudas.
+
+#### 8.3.11 — Catálogo de salones
+
+Debe incluir:
+
+- Listado de salones.
+- Nivel.
+- Grado.
+- Sección.
+- Tutor.
+- Estado.
+- Crear.
+- Editar.
+- Activar/inactivar.
+- Confirmar acciones sensibles.
+- Filtros por nivel.
+
+Los salones activos deben alimentar Nueva operación, Registro por lote,
+Deudas y reportes.
+
+#### 8.3.12 — Catálogo de profesores
+
+Debe incluir:
+
+- Nombre.
+- Rol.
+- Salón tutor.
+- Nivel.
+- Estado.
+- Deuda resumida.
+- Crear.
+- Editar.
+- Activar/inactivar.
+- Detalle de cuenta.
+
+Los profesores activos deben alimentar las operaciones y los reportes.
+
+#### 8.3.13 — Catálogo de personal
+
+Debe incluir:
+
+- Nombre.
+- Rol.
+- Tipo administrativo/docente.
+- Salón tutor cuando aplique.
+- Estado.
+- Crear.
+- Editar.
+- Activar/inactivar.
+
+Debe alimentar los campos de dirección y autorización.
+
+#### 8.3.14 — Catálogo de alumnos
+
+Debe incluir:
+
+- Nombre.
+- Salón.
+- Grado.
+- Sección.
+- Nivel.
+- Estado.
+- Filtros por nivel y salón.
+- Crear.
+- Editar.
+- Activar/inactivar.
+- Consulta de deuda.
+
+#### 8.3.15 — Catálogo de usuarios
+
+Debe incluir:
+
+- Usuario.
+- Persona asociada.
+- Nivel de acceso.
+- Estado.
+- Crear.
+- Editar.
+- Activar/inactivar.
+- Confirmación antes de eliminar o desactivar.
+
+Los niveles mínimos son administrador, operador y consulta. La autorización
+de acciones sensibles debe prepararse aunque el login completo pertenezca a
+una fase posterior.
+
+#### 8.3.16 — Configuración de precios
+
+Debe incluir un tarifario por servicio con:
+
+- Nombre.
+- Descripción.
+- Precio para profesor.
+- Precio para alumno.
+- Precio para dirección.
+- Precio variable cuando aplique.
+- Estado.
+- Crear y editar.
+- Activar/inactivar.
+- Historial de precios por año.
+
+Los precios activos deben ser la fuente de Nueva operación, Registro por lote,
+Kiosco y reportes.
+
+#### 8.3.17 — Configuración del sistema
+
+Debe incluir acciones explícitas y confirmadas para:
+
+- Ver cantidad de registros almacenados.
+- Restaurar datos demo.
+- Limpiar transacciones.
+- Iniciar desde cero.
+- Mantener catálogos cuando una limpieza solo afecte transacciones.
+
+Las acciones destructivas deben mostrar advertencia, resumen del alcance y
+confirmación. No se debe borrar información silenciosamente.
+
+#### 8.3.18 — Matriz de pantallas y estado de paridad
+
+| Pantalla v1 | Ruta React objetivo | Estado inicial | Criterio para marcar `[x]` |
+|---|---|---|---|
+| Dashboard | `/` | `[~]` | Cards, cálculos, gráficos, navegación y pruebas completas |
+| Nueva operación | `/operaciones` | `[~]` | Flujo multiítem, reglas, persistencia, detalle y pruebas |
+| Registro por lote | `/operaciones/lote` | `[ ]` | Tres pestañas, preview, guardado masivo y reutilización de reglas |
+| Historial | `/operaciones/historial` | `[ ]` | Filtros, paginación, exportación, detalle y anulación |
+| Pagos | `/pagos` | `[~]` | Asociación, validación, saldo, historial y detalle |
+| Deudas profesores | `/deudas/profesores` | `[ ]` | Cuenta, filtros, abonos y estados correctos |
+| Deudas alumnos | `/deudas/alumnos` | `[ ]` | Cuenta, filtros, abonos y estados correctos |
+| Deudas dirección | `/deudas/direccion` | `[ ]` | Cuenta consolidada, pagos y saldo |
+| Kiosco | `/kiosco` | `[~]` | Venta, pago, stock persistente e historial |
+| Reporte diario | `/reportes/diario` | `[ ]` | Fecha, métricas, servicios, tabla y exportación |
+| Reporte por período | `/reportes/periodo` | `[ ]` | Rango, filtros, tendencia, rankings y exportación |
+| Salones | `/catalogos/salones` | `[ ]` | CRUD conectado a operaciones |
+| Profesores | `/catalogos/profesores` | `[ ]` | CRUD conectado a deudas y operaciones |
+| Personal | `/catalogos/personal` | `[ ]` | CRUD conectado a dirección |
+| Alumnos | `/catalogos/alumnos` | `[ ]` | CRUD conectado a operaciones y deudas |
+| Usuarios | `/catalogos/usuarios` | `[ ]` | CRUD y niveles de acceso |
+| Precios | `/config/precios` | `[ ]` | Tarifario conectado a cálculos |
+| Sistema | `/config/sistema` | `[ ]` | Respaldos, restauración y acciones destructivas confirmadas |
+
+#### 8.3.19 — Contrato mínimo común de cada pantalla
+
+Antes de implementar una pantalla se debe documentar:
+
+1. Fuente de datos y repositorios.
+2. Entidades involucradas.
+3. Cálculos y reglas de negocio.
+4. Columnas y límites de tablas.
+5. Botones y navegación.
+6. Estados de carga, vacío, error y éxito.
+7. Permisos o acciones sensibles.
+8. Criterios de accesibilidad y responsive.
+9. Pruebas unitarias.
+10. Pruebas E2E.
+
+Este contrato será la referencia para decidir si una pantalla está en
+`[ ]`, `[~]` o `[x]`.
+
 ### F2.1 — Fundación técnica
 
 - Convertir el punto de entrada a TypeScript.
@@ -508,82 +974,41 @@ El Dashboard podrá marcarse como `[x]` únicamente cuando:
 
 ### F2.5 — Operaciones
 
-- Listado de operaciones.
-- Búsqueda, filtros, orden y paginación.
-- Formulario de nueva operación.
-- Selección de solicitante.
-- Selección de servicio.
-- Cálculo de importes.
-- Estado de operación.
-- Correlativo y referencia visible.
-- Detalle de operación.
-- Anulación controlada.
+- Nueva operación completa según 8.3.1.
+- Registro por lote según 8.3.2.
+- Historial, detalle y anulación según 8.3.3.
+- Repositorios y casos de uso compartidos por los tres flujos.
 
 **Salida:** se puede registrar y consultar una operación sin romper las reglas del dominio.
 
 ### F2.6 — Kiosco
 
-- Catálogo de productos.
-- Búsqueda por nombre, código y categoría.
-- Vista de stock.
-- Indicador de stock bajo.
-- Registro de venta.
-- Cantidades y subtotal.
-- Total de venta.
-- Estado activo/inactivo del producto.
+- Catálogo, venta, pago, stock e historial según 8.3.8.
 
 **Salida:** el módulo deja de ser únicamente un acceso visual y permite recorrer el flujo de venta demo.
 
 ### F2.7 — Pagos
 
-- Listado de pagos.
-- Asociación con operación o entidad.
-- Tipo de pago.
-- Referencia de pago.
-- Importe.
-- Estado de validación.
-- Reglas visuales de comprobante requerido/opcional.
-- Registro de pago.
-- Validación de campos según método.
-- Consulta del detalle.
+- Asociación, validación, estados, saldo, historial y detalle según 8.3.4.
 
 **Salida:** el usuario distingue claramente efectivo, Yape, Plin, transferencia y pagos pendientes de validación.
 
 ### F2.8 — Deudas
 
-- Listado de personas con saldo.
-- Filtros por estado y vencimiento.
-- Estado de cuenta.
-- Historial de operaciones y pagos.
-- Registro de abono.
-- Cálculo de saldo restante.
-- Estados pendiente, parcial y pagado.
+- Profesores, alumnos y dirección según 8.3.5, 8.3.6 y 8.3.7.
 
 **Salida:** el saldo mostrado coincide con las operaciones y pagos demo.
 
 ### F2.9 — Catálogos
 
-- Servicios.
-- Productos.
-- Categorías.
-- Métodos de pago.
-- Personas o solicitantes.
-- Estados configurables cuando corresponda.
-- Alta, edición, activación e inactivación.
-- Confirmación antes de acciones destructivas o sensibles.
+- Salones, profesores, personal, alumnos, usuarios, servicios, productos,
+  categorías y métodos de pago según 8.3.11 a 8.3.15.
 
 **Salida:** los catálogos utilizados por formularios se administran desde una vista común.
 
 ### F2.10 — Reportes
 
-- Filtros por rango de fechas.
-- Tipo de operación.
-- Método de pago.
-- Estado.
-- Resumen de resultados.
-- Tabla de resultados.
-- Gráfico principal.
-- Exportación definida para la v2.
+- Reporte diario y reporte por período según 8.3.9 y 8.3.10.
 
 **Salida:** los reportes se pueden consultar con filtros y exportar con información coherente.
 
