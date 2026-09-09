@@ -92,49 +92,80 @@ TanStack Query quedará preparado conceptualmente para la API futura, pero no se
 9. Hacer commits pequeños, verificables y descriptivos.
 10. No integrar directamente a `main`; toda modificación pasará por rama y revisión.
 
-## 7. Arquitectura de carpetas objetivo
+## 7. Arquitectura de carpetas de la Fase 2
 
-La estructura se construirá progresivamente dentro de `prototipo-react`:
+La arquitectura general del plan inicial se respeta, pero en esta fase solo se implementa el cliente web. Electron, móvil, SQLite, backend y paquetes compartidos futuros no se crean todavía.
+
+### 7.1. Estructura real durante la Fase 2
+
+El proyecto actual conserva la v1 en la raíz y mantiene la SPA v2 aislada en `prototipo-react`. Esta es la estructura que se debe completar durante esta fase:
 
 ```text
-prototipo-react/
-├── public/
-├── src/
-│   ├── app/
-│   │   ├── App.tsx
-│   │   ├── providers.tsx
-│   │   └── router.tsx
-│   ├── components/
-│   │   ├── layout/
-│   │   ├── ui/
-│   │   ├── feedback/
-│   │   ├── tables/
-│   │   └── forms/
-│   ├── features/
-│   │   ├── dashboard/
-│   │   ├── operaciones/
-│   │   ├── kiosco/
-│   │   ├── pagos/
-│   │   ├── deudas/
-│   │   ├── catalogos/
-│   │   └── reportes/
-│   ├── data/
-│   │   ├── demo/
-│   │   └── repositories/
-│   ├── types/
-│   ├── lib/
-│   ├── stores/
-│   ├── styles/
-│   └── main.tsx
-├── tests/
-│   ├── unit/
-│   └── e2e/
-├── index.html
-├── package.json
-└── tsconfig.json
+bce-system/
+├── index.html                  # v1 congelada; no modificar desde v2
+├── css/                        # estilos de v1
+├── js/                         # lógica de v1
+├── database/                   # esquema de referencia; no es SQLite de Fase 2
+├── PLAN_ANALISIS_Y_MIGRACION_FRONTEND.md
+├── PLAN_FASE2_REACT_TAILADMIN.md
+└── prototipo-react/            # aplicación oficial de Fase 2
+    ├── public/                 # favicon y archivos estáticos de la SPA
+    ├── src/
+    │   ├── app/                # composición de la aplicación, providers y router
+    │   ├── components/
+    │   │   ├── layout/         # sidebar, navbar, breadcrumb y shell TailAdmin
+    │   │   ├── ui/             # botón, badge, modal, input, select y alert
+    │   │   ├── feedback/       # loading, error, empty state y notificaciones
+    │   │   ├── tables/         # tabla base, filtros y paginación
+    │   │   └── forms/          # campos y controles reutilizables
+    │   ├── features/           # una carpeta por módulo de negocio
+    │   │   ├── dashboard/
+    │   │   ├── operaciones/
+    │   │   ├── kiosco/
+    │   │   ├── pagos/
+    │   │   ├── deudas/
+    │   │   ├── catalogos/
+    │   │   └── reportes/
+    │   ├── data/
+    │   │   ├── demo/           # JSON versionado y fixtures
+    │   │   └── repositories/   # puertos y adaptadores de datos locales
+    │   ├── types/              # entidades, DTO y tipos de UI
+    │   ├── lib/                # utilidades, formato y configuración
+    │   ├── stores/             # Zustand para estado de interfaz
+    │   ├── styles/             # tokens y estilos globales Tailwind
+    │   └── main.tsx            # punto de entrada
+    ├── tests/
+    │   ├── unit/               # Vitest
+    │   └── e2e/                # Playwright
+    ├── index.html
+    ├── package.json
+    ├── tsconfig.json
+    └── vite.config.ts
 ```
 
-Durante la migración se podrán mantener archivos puente temporalmente, pero cada uno deberá tener una tarea de reemplazo antes del cierre de la fase.
+### 7.2. Regla de organización de cada feature
+
+Cada módulo debe encapsular su presentación, tipos específicos, validaciones y acceso al repositorio:
+
+```text
+src/features/pagos/
+├── components/                 # PaymentTable, PaymentForm, PaymentStatus
+├── pages/                      # PaymentsPage
+├── schemas/                    # esquemas Zod
+├── services/                   # casos de uso del módulo
+├── types/                      # tipos propios del módulo
+└── index.ts                    # API pública del feature
+```
+
+Las reglas compartidas o puramente de dominio irán en `src/types` y `src/lib`; no se deben importar componentes de una feature directamente desde otra. La comunicación entre módulos se hará mediante tipos, servicios o navegación.
+
+### 7.3. Relación con la arquitectura futura
+
+La estructura general prevista en el plan inicial (`apps/web`, `apps/desktop`, `apps/mobile` y `packages`) es la evolución posterior del repositorio. No se debe crear artificialmente esa estructura durante Fase 2 porque todavía existe un único cliente web y no hay workspace monorepo.
+
+Cuando se prepare la Fase 3, `prototipo-react` podrá trasladarse a `apps/web` mediante una migración explícita. La aplicación Electron futura será `apps/desktop`, el móvil será `apps/mobile` y los adaptadores SQLite/API se incorporarán en sus respectivos paquetes o aplicaciones. Ese traslado no debe mezclarse con la migración funcional actual.
+
+Durante la Fase 2 se podrán mantener archivos puente temporales, pero cada uno deberá tener una tarea de reemplazo antes del cierre de la fase. No se crearán carpetas `desktop`, `mobile`, `sqlite` ni `api` hasta que comiencen sus planes respectivos.
 
 ## 8. Fases internas de trabajo
 
