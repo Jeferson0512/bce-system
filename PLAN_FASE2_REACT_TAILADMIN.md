@@ -206,8 +206,8 @@ implementada y verificada:
 | [x] | Migrar catálogos | `apps/web/src/features/catalogos/pages/CatalogsPage.tsx`; tabs de servicios, productos, categorías y métodos de pago, búsqueda y build validados |
 | [x] | Migrar reportes | `apps/web/src/features/reportes/pages/ReportsPage.tsx`; filtros por tipo/estado, métricas y tabla de resumen con build validado |
 | [x] | Configurar Vitest y pruebas unitarias | `apps/web/vitest.config.ts` y prueba de `operationSchema`; `npm run test` validado |
-| [ ] | Configurar Playwright y pruebas E2E | Pendiente |
-| [ ] | Validar accesibilidad, responsive y rendimiento | Pendiente |
+| [x] | Configurar Playwright y pruebas E2E | `apps/web/playwright.config.ts` y smoke test dashboard-operaciones; Chrome instalado, `npm run test:e2e` validado |
+| [x] | Validar accesibilidad, responsive y rendimiento | Navegación E2E validada en Chrome, botón móvil con nombre accesible, CSS responsive para 1100/800/520 px y build de producción validado |
 
 No se marcará una actividad como completada solo por crear archivos: debe
 existir una validación reproducible y quedar indicada en la columna Evidencia.

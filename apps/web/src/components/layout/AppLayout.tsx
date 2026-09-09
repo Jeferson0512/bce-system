@@ -20,7 +20,7 @@ export function AppLayout() {
         <div className="sidebar-footer"><p className="section-label">SISTEMA</p><button className="nav-link"><Settings size={18} />Configuración</button><small className="storage">Almacenamiento local<br /><b>JSON preparado para migración</b></small></div>
       </aside>
       <main className="main-content">
-        <header className="topbar"><button className="mobile-menu"><Menu size={20} /></button><span className="breadcrumb">BCE System / <b>Fase 2</b></span><div className="top-actions"><span className="template-badge">TailAdmin Free</span><Bell size={18} /><span className="avatar">JP</span></div></header>
+        <header className="topbar"><button className="mobile-menu" aria-label="Abrir menú"><Menu size={20} /></button><span className="breadcrumb">BCE System / <b>Fase 2</b></span><div className="top-actions"><span className="template-badge">TailAdmin Free</span><Bell size={18} aria-label="Notificaciones" /><span className="avatar" aria-label="Usuario JP">JP</span></div></header>
         <div className="page-container"><Outlet /></div>
       </main>
     </div>
