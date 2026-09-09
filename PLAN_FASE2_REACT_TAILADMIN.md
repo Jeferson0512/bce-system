@@ -1,0 +1,459 @@
+# BCE System — Plan completo de la Fase 2
+
+## 1. Propósito del documento
+
+Este documento define el alcance total de la **Fase 2: migración del frontend a React + TypeScript como SPA web**, usando TailAdmin Free como dirección visual.
+
+El documento de análisis general `PLAN_ANALISIS_Y_MIGRACION_FRONTEND.md` se conserva como historial, alcance global y referencia arquitectónica del proyecto. No se modificará durante la ejecución de esta fase.
+
+La Fase 3, correspondiente a Electron + SQLite, tendrá su propio plan independiente cuando la Fase 2 haya sido terminada y validada.
+
+## 2. Punto de partida
+
+La Fase 2 parte de:
+
+```text
+v1.0.0: prototipo HTML/CSS/JavaScript original congelado
+v2.0.0: base React/TailAdmin inicial
+Rama de trabajo: feature/v2-react-foundation
+```
+
+La v1 no se sobrescribe ni se modifica. El frontend de Fase 2 vive actualmente en:
+
+```text
+D:\Trabajos\Propios\bce-system\prototipo-react
+```
+
+## 3. Objetivo de la Fase 2
+
+Construir una SPA web funcional, mantenible y navegable que reemplace progresivamente la presentación vanilla de la v1, conservando las reglas funcionales definidas para BCE System.
+
+Al finalizar esta fase el usuario podrá:
+
+- Abrir BCE System desde un navegador.
+- Navegar mediante URLs reales.
+- Consultar el dashboard.
+- Registrar y consultar operaciones.
+- Gestionar servicios y productos del kiosco.
+- Registrar y consultar pagos.
+- Consultar deudas y estados de cuenta.
+- Gestionar catálogos.
+- Consultar reportes.
+- Validar formularios y recibir mensajes claros.
+- Buscar, filtrar, paginar y ordenar tablas.
+- Exportar información en los módulos definidos.
+- Usar datos JSON versionados mediante un adaptador local.
+
+## 4. Tecnologías aprobadas
+
+| Necesidad | Tecnología |
+|---|---|
+| Framework | React |
+| Lenguaje | TypeScript |
+| Build | Vite |
+| Navegación | React Router |
+| Estilos y template | Tailwind CSS + TailAdmin Free |
+| Componentes accesibles | shadcn/ui y Radix UI cuando aporten valor |
+| Estado local/global | Zustand |
+| Formularios | React Hook Form |
+| Validación | Zod |
+| Tablas | TanStack Table |
+| Gráficos | Recharts inicialmente |
+| Pruebas unitarias | Vitest |
+| Pruebas de interfaz | Playwright |
+| Fuente de datos de esta fase | JSON local mediante adaptadores |
+
+## 5. Fuera del alcance
+
+No se implementará en Fase 2:
+
+- Electron.
+- SQLite.
+- MySQL o PostgreSQL.
+- API o backend.
+- Autenticación real multiusuario.
+- Sincronización entre equipos.
+- Almacenamiento productivo de imágenes.
+- Aplicación móvil.
+- Infraestructura de producción multiusuario.
+
+TanStack Query quedará preparado conceptualmente para la API futura, pero no se utilizará para fingir un backend inexistente. El acceso de esta fase será mediante repositorios/adaptadores locales.
+
+## 6. Principios de implementación
+
+1. Mantener la v1 intacta y ejecutable.
+2. No mezclar lógica de negocio con componentes visuales.
+3. Usar TypeScript sin introducir `any` innecesario.
+4. Validar entradas en el formulario y en el dominio.
+5. No borrar registros funcionales físicamente cuando el negocio requiera anulación.
+6. Mantener identificadores, correlativos, estados y reglas definidos en el plan general.
+7. Mostrar errores explícitos; no usar datos silenciosamente vacíos ante fallos.
+8. Reutilizar componentes comunes antes de duplicar código.
+9. Hacer commits pequeños, verificables y descriptivos.
+10. No integrar directamente a `main`; toda modificación pasará por rama y revisión.
+
+## 7. Arquitectura de carpetas objetivo
+
+La estructura se construirá progresivamente dentro de `prototipo-react`:
+
+```text
+prototipo-react/
+├── public/
+├── src/
+│   ├── app/
+│   │   ├── App.tsx
+│   │   ├── providers.tsx
+│   │   └── router.tsx
+│   ├── components/
+│   │   ├── layout/
+│   │   ├── ui/
+│   │   ├── feedback/
+│   │   ├── tables/
+│   │   └── forms/
+│   ├── features/
+│   │   ├── dashboard/
+│   │   ├── operaciones/
+│   │   ├── kiosco/
+│   │   ├── pagos/
+│   │   ├── deudas/
+│   │   ├── catalogos/
+│   │   └── reportes/
+│   ├── data/
+│   │   ├── demo/
+│   │   └── repositories/
+│   ├── types/
+│   ├── lib/
+│   ├── stores/
+│   ├── styles/
+│   └── main.tsx
+├── tests/
+│   ├── unit/
+│   └── e2e/
+├── index.html
+├── package.json
+└── tsconfig.json
+```
+
+Durante la migración se podrán mantener archivos puente temporalmente, pero cada uno deberá tener una tarea de reemplazo antes del cierre de la fase.
+
+## 8. Fases internas de trabajo
+
+### F2.1 — Fundación técnica
+
+- Convertir el punto de entrada a TypeScript.
+- Configurar `tsconfig` estricto.
+- Definir alias de importación.
+- Separar configuración, tipos y datos demo.
+- Configurar React Router.
+- Definir layout TailAdmin.
+- Crear providers de aplicación.
+- Crear manejo de estados de carga, error y vacío.
+
+**Salida:** la SPA inicia, navega por URL y compila sin errores.
+
+### F2.2 — Sistema visual y componentes compartidos
+
+- Convertir los tokens visuales de la v1 a Tailwind.
+- Definir colores, tipografía, espaciado y estados BCE.
+- Crear sidebar, navbar, breadcrumb y layout responsive.
+- Crear botones, badges, alerts, modales, inputs y selects.
+- Crear tabla base, paginación, filtros y estados.
+- Crear confirmaciones y notificaciones.
+
+**Salida:** los módulos utilizan componentes consistentes y no estilos aislados duplicados.
+
+### F2.3 — Datos locales y dominio
+
+- Definir interfaces TypeScript para operaciones, servicios, productos, pagos, deudas, personas y catálogos.
+- Versionar el JSON demo.
+- Crear repositorios locales tipados.
+- Crear adaptadores para lectura y escritura temporal.
+- Definir errores de dominio.
+- Preparar interfaces de repositorio sustituibles por SQLite/API.
+
+**Salida:** las vistas no dependen directamente de estructuras JSON sin tipado.
+
+### F2.4 — Dashboard
+
+- Indicadores diarios.
+- Gráfico de actividad.
+- Resumen de ingresos.
+- Resumen de deudas.
+- Estado del kiosco.
+- Accesos rápidos.
+- Operaciones recientes.
+- Estados de carga y datos vacíos.
+
+**Salida:** dashboard funcional con datos demo y navegación a los módulos.
+
+### F2.5 — Operaciones
+
+- Listado de operaciones.
+- Búsqueda, filtros, orden y paginación.
+- Formulario de nueva operación.
+- Selección de solicitante.
+- Selección de servicio.
+- Cálculo de importes.
+- Estado de operación.
+- Correlativo y referencia visible.
+- Detalle de operación.
+- Anulación controlada.
+
+**Salida:** se puede registrar y consultar una operación sin romper las reglas del dominio.
+
+### F2.6 — Kiosco
+
+- Catálogo de productos.
+- Búsqueda por nombre, código y categoría.
+- Vista de stock.
+- Indicador de stock bajo.
+- Registro de venta.
+- Cantidades y subtotal.
+- Total de venta.
+- Estado activo/inactivo del producto.
+
+**Salida:** el módulo deja de ser únicamente un acceso visual y permite recorrer el flujo de venta demo.
+
+### F2.7 — Pagos
+
+- Listado de pagos.
+- Asociación con operación o entidad.
+- Tipo de pago.
+- Referencia de pago.
+- Importe.
+- Estado de validación.
+- Reglas visuales de comprobante requerido/opcional.
+- Registro de pago.
+- Validación de campos según método.
+- Consulta del detalle.
+
+**Salida:** el usuario distingue claramente efectivo, Yape, Plin, transferencia y pagos pendientes de validación.
+
+### F2.8 — Deudas
+
+- Listado de personas con saldo.
+- Filtros por estado y vencimiento.
+- Estado de cuenta.
+- Historial de operaciones y pagos.
+- Registro de abono.
+- Cálculo de saldo restante.
+- Estados pendiente, parcial y pagado.
+
+**Salida:** el saldo mostrado coincide con las operaciones y pagos demo.
+
+### F2.9 — Catálogos
+
+- Servicios.
+- Productos.
+- Categorías.
+- Métodos de pago.
+- Personas o solicitantes.
+- Estados configurables cuando corresponda.
+- Alta, edición, activación e inactivación.
+- Confirmación antes de acciones destructivas o sensibles.
+
+**Salida:** los catálogos utilizados por formularios se administran desde una vista común.
+
+### F2.10 — Reportes
+
+- Filtros por rango de fechas.
+- Tipo de operación.
+- Método de pago.
+- Estado.
+- Resumen de resultados.
+- Tabla de resultados.
+- Gráfico principal.
+- Exportación definida para la v2.
+
+**Salida:** los reportes se pueden consultar con filtros y exportar con información coherente.
+
+### F2.11 — Calidad y endurecimiento
+
+- Revisar accesibilidad básica.
+- Revisar responsive.
+- Revisar estados de error, carga y vacío.
+- Eliminar imports y componentes muertos.
+- Eliminar archivos puente ya reemplazados.
+- Revisar rendimiento del bundle.
+- Revisar navegación directa por URL.
+- Revisar persistencia temporal y restauración de datos demo.
+
+**Salida:** aplicación lista para piloto web.
+
+## 9. Formularios y reglas de validación
+
+Todos los formularios nuevos usarán React Hook Form y esquemas Zod.
+
+Las validaciones mínimas incluyen:
+
+- Campos obligatorios.
+- Importes mayores que cero cuando corresponda.
+- Métodos de pago válidos.
+- Referencia requerida según configuración del método.
+- Imagen o comprobante señalado como requerido, opcional o no permitido según configuración.
+- Cantidades enteras y positivas para kiosco.
+- Fechas válidas.
+- No permitir operaciones con catálogos inactivos.
+- Mensajes próximos al campo con error.
+- Resumen general cuando existan errores múltiples.
+
+## 10. Estado de aplicación
+
+Zustand se utilizará solamente para estado local/global de interfaz, por ejemplo:
+
+- Sidebar abierto o cerrado.
+- Preferencia de tema.
+- Filtros persistentes de interfaz.
+- Modal activo.
+- Notificaciones.
+- Preferencias de tabla.
+
+Los datos de negocio se consultarán mediante repositorios locales. Cuando exista API, esos repositorios podrán reemplazarse por TanStack Query sin rediseñar las vistas.
+
+## 11. Tablas y gráficos
+
+Las tablas complejas usarán TanStack Table para:
+
+- Ordenamiento.
+- Filtrado.
+- Columnas.
+- Paginación.
+- Selección cuando sea necesaria.
+- Visibilidad de columnas.
+
+Los gráficos iniciales usarán Recharts. Cada gráfico debe tener:
+
+- Título.
+- Unidad o contexto.
+- Estado sin datos.
+- Alternativa textual cuando sea razonable.
+- Datos derivados de la misma fuente que la tabla.
+
+## 12. Pruebas
+
+### Pruebas unitarias con Vitest
+
+Se cubrirán prioritariamente:
+
+- Cálculo de totales.
+- Cálculo de saldos.
+- Validación de pagos.
+- Reglas de referencia y comprobante.
+- Correlativos.
+- Filtros.
+- Transformaciones de datos.
+- Adaptadores JSON.
+
+### Pruebas de interfaz con Playwright
+
+Flujos mínimos:
+
+1. Abrir dashboard.
+2. Navegar directamente a cada URL.
+3. Crear una operación válida.
+4. Rechazar un formulario inválido.
+5. Buscar y filtrar operaciones.
+6. Registrar un pago con método y referencia.
+7. Consultar una deuda.
+8. Registrar una venta de kiosco.
+9. Administrar un catálogo.
+10. Consultar y exportar un reporte.
+
+## 13. Ramas y commits
+
+La rama actual es la base de la fundación:
+
+```text
+feature/v2-react-foundation
+```
+
+Para cada bloque se crearán ramas específicas desde la base actualizada:
+
+```text
+feature/v2-types-and-data
+feature/v2-layout-components
+feature/v2-dashboard
+feature/v2-operaciones
+feature/v2-kiosco
+feature/v2-pagos
+feature/v2-deudas
+feature/v2-catalogos
+feature/v2-reportes
+test/v2-quality
+release/v2.1.0
+```
+
+Cada rama debe:
+
+1. Tener un objetivo único.
+2. Compilar antes del commit.
+3. Pasar las pruebas relacionadas.
+4. Tener commits pequeños.
+5. Publicarse en remoto.
+6. Integrarse mediante revisión.
+
+`main` solo recibirá cambios revisados y verificables.
+
+## 14. Criterios de aceptación de la Fase 2
+
+La Fase 2 se considerará completa cuando:
+
+- La aplicación use React + TypeScript como base real.
+- TailAdmin sea la única dirección visual activa.
+- Todas las rutas principales funcionen.
+- Los módulos definidos estén implementados y navegables.
+- Las vistas no dependan de eventos inline ni variables globales de la v1.
+- Los datos estén tipados y aislados detrás de adaptadores.
+- Los formularios tengan validación Zod.
+- Las tablas complejas usen TanStack Table.
+- Los gráficos usen Recharts.
+- Existan pruebas unitarias para reglas críticas.
+- Existan pruebas Playwright para flujos principales.
+- La compilación de producción funcione.
+- La navegación directa por URL funcione.
+- La aplicación sea usable en escritorio y pantallas reducidas.
+- La v1 siga disponible mediante `v1.0.0`.
+- Exista un tag de cierre de fase, por ejemplo `v2.1.0`.
+- El plan de Fase 3 se cree como documento separado después del cierre.
+
+## 15. Entrega y publicación web
+
+Para el piloto web:
+
+1. Ejecutar `npm run build`.
+2. Publicar el contenido de `dist`.
+3. Configurar fallback del servidor para rutas SPA.
+4. Verificar que `/`, `/operaciones`, `/kiosco`, `/pagos`, `/deudas`, `/catalogos` y `/reportes` abran directamente.
+5. Mantener respaldo de los JSON demo.
+6. Documentar la URL y el procedimiento de reversión.
+
+Esta publicación no se considerará todavía multiusuario ni productiva con datos reales, porque la fase no incluye API ni base online.
+
+## 16. Orden de ejecución recomendado
+
+```text
+1. Fundación TypeScript y Router
+2. Layout TailAdmin y componentes compartidos
+3. Tipos, JSON y repositorios locales
+4. Dashboard
+5. Operaciones
+6. Kiosco
+7. Pagos
+8. Deudas
+9. Catálogos
+10. Reportes
+11. Vitest
+12. Playwright
+13. Accesibilidad, responsive y rendimiento
+14. Piloto web
+15. Revisión y tag de cierre de Fase 2
+```
+
+## 17. Cierre de fase
+
+Al completar todos los criterios:
+
+- Se congelará la entrega de Fase 2 con un tag.
+- Se actualizará únicamente la documentación de estado necesaria, sin alterar el plan histórico.
+- Se elaborará un nuevo documento `PLAN_FASE3_ELECTRON_SQLITE.md`.
+- La Fase 3 comenzará desde la SPA React validada, sin duplicar el frontend.
