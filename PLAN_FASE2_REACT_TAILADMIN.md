@@ -119,7 +119,7 @@ bce-system/
 │   ├── data-access/            # adaptadores JSON, SQLite y API
 │   └── config/                 # configuración compartida
 ├── database/                   # reservado para SQLite de Fase 3
-├── legacy-v1/                  # v1 conservada para referencia y reversión
+├── legacy-v1/                  # v1 original congelada en v1.0.0
 │   ├── index.html
 │   ├── css/
 │   └── js/
@@ -131,6 +131,10 @@ bce-system/
 ├── pnpm-workspace.yaml
 └── prototipo-react/            # referencia visual; no modificar para Fase 2
 ```
+
+La v1 original se conserva físicamente en `legacy-v1/` con sus rutas relativas
+intactas (`index.html`, `css/`, `js/` y `database/`). La etiqueta Git `v1.0.0`
+también permanece disponible como punto de reversión.
 
 Durante Fase 2 se implementarán principalmente `apps/web`, `packages/domain`, `packages/application`, `packages/contracts`, `packages/ui`, `packages/data-access/json`, `packages/config`, `tests/unit` y `tests/e2e`. Las carpetas de Electron, móvil, SQLite y cliente API se reservan sin funcionalidad hasta sus fases correspondientes.
 
