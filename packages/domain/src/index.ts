@@ -8,6 +8,24 @@ export interface Operation {
   amount: number;
   status: OperationStatus;
   time: string;
+  date?: string;
+  requesterType?: 'profesor' | 'alumno' | 'direccion';
+  requesterId?: string;
+  notes?: string;
+  items?: OperationItem[];
+  paymentStatus?: 'Sin pago' | 'Pendiente' | 'Pagado';
+}
+
+export interface OperationItem {
+  serviceId: string;
+  service: string;
+  salonId?: string;
+  salon?: string;
+  quantity: number;
+  copies?: number;
+  unitPrice: number;
+  subtotal: number;
+  personal: boolean;
 }
 
 export interface Payment {

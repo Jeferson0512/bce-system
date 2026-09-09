@@ -200,7 +200,7 @@ implementada y verificada:
 | [x] | Crear puerto y repositorio local de operaciones | `packages/application/src/ports/OperationRepository.ts` y `packages/data-access/json/src/operationRepository.ts`; Dashboard y Operaciones consumen el repositorio, pruebas Vitest validadas |
 | [x] | Crear componentes UI reutilizables | `apps/web/src/components/ui`, `feedback` y `tables`; typecheck/build validados |
 | [~] | Crear dashboard inicial | `apps/web/src/pages/DashboardPage.tsx`; shell, métricas demo y tabla visual validados. Falta paridad de datos y reglas con v1 |
-| [~] | Crear operaciones iniciales | `apps/web/src/features/operaciones`; formulario básico y repositorio inicial validados. Falta el flujo v1 de solicitante, persona, pedido multiítem, salones, cobro, pago y detalle |
+| [~] | Reconstruir operaciones v1 en React | `apps/web/src/features/operaciones`; solicitante por tipo, persona, pedido multiítem, salón, fecha, notas, pago, repositorio y E2E de guardado implementados. Falta detalle, historial completo, anulación y registro por lote |
 | [~] | Crear kiosco inicial | `apps/web/src/features/kiosco/pages/KioscoPage.tsx`; búsqueda, filtro, stock visual y carrito validados. Falta persistencia, pago y descuento real de stock |
 | [~] | Crear pagos iniciales | `apps/web/src/features/pagos/pages/PaymentsPage.tsx`; formulario y referencia condicional validados. Falta asociación persistente, importe, comprobante, detalle e historial |
 | [~] | Crear deudas iniciales | `apps/web/src/features/deudas/pages/DebtsPage.tsx`; estados y abono visual validados. Falta cálculo conectado a operaciones/pagos e historial por persona |
