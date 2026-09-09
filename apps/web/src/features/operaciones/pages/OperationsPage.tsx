@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { CheckCircle2, ClipboardList, Plus, Trash2 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { Button } from '../../../components/ui/Button';
 import { DataTable } from '../../../components/tables/DataTable';
 import { StatusBadge } from '../../../components/feedback/StatusBadge';
@@ -79,7 +80,7 @@ export function OperationsPage() {
     operationRepository.save(operation); setSaved(true); setItems([]); setNotes(''); setPaymentStatus('Sin pago');
   };
 
-  return <><div className="page-heading"><div><p className="eyebrow">BCE SYSTEM · OPERACIONES</p><h1>Nueva operación</h1><p className="muted">Registra copias, impresiones y otros servicios con la lógica de la v1.</p></div><Button onClick={() => document.getElementById('operation-form')?.scrollIntoView({ behavior: 'smooth' })}><Plus size={17} /> Nueva operación</Button></div>
+  return <><div className="page-heading"><div><p className="eyebrow">BCE SYSTEM · OPERACIONES</p><h1>Nueva operación</h1><p className="muted">Registra copias, impresiones y otros servicios con la lógica de la v1.</p></div><div className="history-actions"><Link className="secondary-button" to="/operaciones/historial">Ver historial</Link><Button onClick={() => document.getElementById('operation-form')?.scrollIntoView({ behavior: 'smooth' })}><Plus size={17} /> Nueva operación</Button></div></div>
     {saved && <div className="success-alert"><CheckCircle2 size={17} /> Operación guardada correctamente en el repositorio local.</div>}
     <div className="operation-workspace">
       <div className="operation-builder">

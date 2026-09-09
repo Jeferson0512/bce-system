@@ -3,6 +3,7 @@ import { AppLayout } from '../components/layout/AppLayout';
 import { ModulePage } from '../pages/ModulePage';
 import { DashboardPage } from '../pages/DashboardPage';
 import { OperationsPage } from '../features/operaciones/pages/OperationsPage';
+import { OperationHistoryPage } from '../features/operaciones/pages/OperationHistoryPage';
 import { KioscoPage } from '../features/kiosco/pages/KioscoPage';
 import { PaymentsPage } from '../features/pagos/pages/PaymentsPage';
 import { DebtsPage } from '../features/deudas/pages/DebtsPage';
@@ -19,6 +20,7 @@ export function App() {
         {modules.map((module) => (
           <Route key={module} path={module} element={module === 'operaciones' ? <OperationsPage /> : module === 'kiosco' ? <KioscoPage /> : module === 'pagos' ? <PaymentsPage /> : module === 'deudas' ? <DebtsPage /> : module === 'catalogos' ? <CatalogsPage /> : module === 'reportes' ? <ReportsPage /> : <ModulePage module={module} />} />
         ))}
+        <Route path="operaciones/historial" element={<OperationHistoryPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
     </Routes>
