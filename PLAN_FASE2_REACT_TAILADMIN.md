@@ -199,19 +199,46 @@ implementada y verificada:
 | [x] | Crear tipos y adaptador JSON local | `packages/domain/src/index.ts` y `packages/data-access/json/src/demoData.ts`; typecheck/build validados |
 | [x] | Crear puerto y repositorio local de operaciones | `packages/application/src/ports/OperationRepository.ts` y `packages/data-access/json/src/operationRepository.ts`; Dashboard y Operaciones consumen el repositorio, pruebas Vitest validadas |
 | [x] | Crear componentes UI reutilizables | `apps/web/src/components/ui`, `feedback` y `tables`; typecheck/build validados |
-| [x] | Migrar dashboard | `apps/web/src/pages/DashboardPage.tsx`; typecheck/build validados |
-| [x] | Migrar operaciones | `apps/web/src/features/operaciones`; React Hook Form + Zod y typecheck/build validados |
-| [x] | Migrar kiosco | `apps/web/src/features/kiosco/pages/KioscoPage.tsx`; búsqueda, filtro por categoría, límite de stock, carrito y build validados |
-| [x] | Migrar pagos | `apps/web/src/features/pagos/pages/PaymentsPage.tsx`; formulario React Hook Form + Zod, referencia condicional por método y build validados |
-| [x] | Migrar deudas | `apps/web/src/features/deudas/pages/DebtsPage.tsx`; estados de cuenta, saldos, vencimientos, abono visual y build validados |
-| [x] | Migrar catálogos | `apps/web/src/features/catalogos/pages/CatalogsPage.tsx`; tabs de servicios, productos, categorías y métodos de pago, búsqueda y build validados |
-| [x] | Migrar reportes | `apps/web/src/features/reportes/pages/ReportsPage.tsx`; filtros por tipo/estado, métricas y tabla de resumen con build validado |
+| [~] | Crear dashboard inicial | `apps/web/src/pages/DashboardPage.tsx`; shell, métricas demo y tabla visual validados. Falta paridad de datos y reglas con v1 |
+| [~] | Crear operaciones iniciales | `apps/web/src/features/operaciones`; formulario básico y repositorio inicial validados. Falta el flujo v1 de solicitante, persona, pedido multiítem, salones, cobro, pago y detalle |
+| [~] | Crear kiosco inicial | `apps/web/src/features/kiosco/pages/KioscoPage.tsx`; búsqueda, filtro, stock visual y carrito validados. Falta persistencia, pago y descuento real de stock |
+| [~] | Crear pagos iniciales | `apps/web/src/features/pagos/pages/PaymentsPage.tsx`; formulario y referencia condicional validados. Falta asociación persistente, importe, comprobante, detalle e historial |
+| [~] | Crear deudas iniciales | `apps/web/src/features/deudas/pages/DebtsPage.tsx`; estados y abono visual validados. Falta cálculo conectado a operaciones/pagos e historial por persona |
+| [~] | Crear catálogos iniciales | `apps/web/src/features/catalogos/pages/CatalogsPage.tsx`; tabs y búsqueda validados. Falta CRUD, personas, activación/inactivación y conexión con formularios |
+| [~] | Crear reportes iniciales | `apps/web/src/features/reportes/pages/ReportsPage.tsx`; filtros y tabla demo validados. Falta rango de fechas real, método de pago, gráfico y exportación |
 | [x] | Configurar Vitest y pruebas unitarias | `apps/web/vitest.config.ts` y prueba de `operationSchema`; `npm run test` validado |
 | [x] | Configurar Playwright y pruebas E2E | `apps/web/playwright.config.ts` y smoke test dashboard-operaciones; Chrome instalado, `npm run test:e2e` validado |
 | [x] | Validar accesibilidad, responsive y rendimiento | Navegación E2E validada en Chrome, botón móvil con nombre accesible, CSS responsive para 1100/800/520 px y build de producción validado |
 
 No se marcará una actividad como completada solo por crear archivos: debe
 existir una validación reproducible y quedar indicada en la columna Evidencia.
+
+`[~]` indica una base visual o funcional parcial. Solo `[x]` significa que
+existe paridad suficiente con la lógica de la v1 y que el flujo está conectado
+a datos, reglas y pruebas. Las pantallas actuales de módulos no se consideran
+la migración terminada mientras permanezcan en estado `[~]`.
+
+### 8.1 — Brecha de paridad v1 → v2
+
+La v1 congelada en `legacy-v1/` contiene reglas que no deben perderse en la
+reconstrucción React. La v2 actual conserva el shell y una primera representación
+visual, pero todavía debe recuperar estas capacidades:
+
+| Área de v1 | Situación actual en v2 | Trabajo necesario |
+|---|---|---|
+| Nueva operación | Formulario simplificado | Solicitante por tipo, persona, pedido multiítem, salones, fecha, notas, cobro, pago y guardado |
+| Registro por lote | No migrado | Flujo por lote y cálculo por ítems |
+| Historial | Tabla demo de operaciones | Filtros, detalle, ordenamiento, paginación y anulación controlada |
+| Deudas por persona | Vista general demo | Profesores, alumnos y dirección con saldo derivado |
+| Kiosco | Carrito local | Venta persistente, pago y descuento de stock |
+| Reportes | Tabla demo | Fuentes compartidas, fechas, gráficos y exportación |
+| Catálogos | Tabs visuales | CRUD y conexión con operaciones, pagos y kiosco |
+| Configuración | Sin módulo real | Precios, sistema, usuarios y permisos |
+
+La estrategia de migración será vertical: primero se reconstruye una capacidad
+completa de la v1 en dominio, repositorio, caso de uso, formulario, detalle y
+pruebas; después se marca `[x]`. Crear una ruta o una pantalla no constituye
+por sí solo una migración.
 
 ### F2.1 — Fundación técnica
 
