@@ -18,10 +18,10 @@ v2.0.0: base React/TailAdmin inicial
 Rama de trabajo: feature/v2-react-foundation
 ```
 
-La v1 no se sobrescribe ni se modifica. El frontend de Fase 2 se implementará directamente en la raíz del proyecto:
+La v1 no se sobrescribe ni se modifica. El frontend de Fase 2 se implementará dentro del repositorio principal, en la aplicación web `apps/web`:
 
 ```text
-D:\Trabajos\Propios\bce-system
+D:\Trabajos\Propios\bce-system\apps\web
 ```
 
 La carpeta `prototipo-react` se mantiene solo como prototipo visual de consulta.
@@ -96,42 +96,52 @@ TanStack Query quedará preparado conceptualmente para la API futura, pero no se
 
 ## 7. Arquitectura de carpetas de la Fase 2
 
-La arquitectura general del plan inicial se respeta, pero en esta fase se implementa el cliente web directamente en la raíz de `bce-system`. Electron, móvil, SQLite, backend y paquetes compartidos futuros no se crean todavía. `prototipo-react` se conserva únicamente como referencia visual y no forma parte de la aplicación de Fase 2.
+La arquitectura general del plan inicial se respeta. Todo permanece dentro del repositorio `bce-system`, pero la aplicación web se ubicará en `apps/web`, tal como establece la arquitectura objetivo. Electron, móvil, SQLite, backend y sus implementaciones se reservan para fases posteriores. `prototipo-react` se conserva únicamente como referencia visual y no forma parte de la aplicación de Fase 2.
 
 ### 7.1. Estructura real durante la Fase 2
 
-El proyecto contiene los archivos históricos de la v1 y la aplicación React de Fase 2 en la raíz. Esta es la estructura que se debe completar durante esta fase:
+El proyecto contiene los archivos históricos de la v1, la aplicación web React en `apps/web` y los paquetes compartidos definidos por la arquitectura. Esta es la estructura objetivo del repositorio:
 
 ```text
 bce-system/
+├── apps/
+│   ├── web/                    # aplicación React real de Fase 2
+│   │   ├── src/
+│   │   ├── public/
+│   │   └── vite.config.ts
+│   ├── desktop/                # reservado para Fase 3
+│   └── mobile/                 # reservado para fase móvil futura
+├── packages/
+│   ├── domain/                 # reglas y entidades compartibles
+│   ├── application/            # casos de uso y puertos
+│   ├── contracts/              # esquemas y contratos
+│   ├── ui/                     # componentes y theme compartidos
+│   ├── data-access/            # adaptadores JSON, SQLite y API
+│   └── config/                 # configuración compartida
+├── database/                   # reservado para SQLite de Fase 3
 ├── legacy-v1/                  # v1 conservada para referencia y reversión
 │   ├── index.html
 │   ├── css/
 │   └── js/
-├── index.html                  # entrada de React/Vite de Fase 2
-├── public/                     # archivos estáticos de React
-├── src/                        # aplicación React real de Fase 2
-├── tests/                      # Vitest y Playwright
-├── package.json
-├── tsconfig.json
-├── vite.config.ts
-├── database/                   # esquema de referencia; no es SQLite de Fase 2
+├── docs/
+├── tests/
 ├── PLAN_ANALISIS_Y_MIGRACION_FRONTEND.md
 ├── PLAN_FASE2_REACT_TAILADMIN.md
+├── package.json
+├── pnpm-workspace.yaml
 └── prototipo-react/            # referencia visual; no modificar para Fase 2
 ```
 
-Dentro de `src/` se completará la siguiente estructura:
+Durante Fase 2 se implementarán principalmente `apps/web`, `packages/domain`, `packages/application`, `packages/contracts`, `packages/ui`, `packages/data-access/json`, `packages/config`, `tests/unit` y `tests/e2e`. Las carpetas de Electron, móvil, SQLite y cliente API se reservan sin funcionalidad hasta sus fases correspondientes.
+
+Dentro de `apps/web/src/` se completará la siguiente estructura:
 
 ```text
-src/
+apps/web/src/
 ├── app/                        # composición, providers y router
-├── components/
-│   ├── layout/                 # sidebar, navbar, breadcrumb y shell TailAdmin
-│   ├── ui/                     # botón, badge, modal, input, select y alert
-│   ├── feedback/               # loading, error, empty state y notificaciones
-│   ├── tables/                 # tabla base, filtros y paginación
-│   └── forms/                  # campos y controles reutilizables
+├── pages/                      # páginas asociadas a rutas
+├── routes/                     # definición de rutas SPA
+├── components/                 # layout, UI, tablas, formularios y feedback
 ├── features/                   # una carpeta por módulo de negocio
 │   ├── dashboard/
 │   ├── operaciones/
@@ -140,11 +150,6 @@ src/
 │   ├── deudas/
 │   ├── catalogos/
 │   └── reportes/
-├── data/
-│   ├── demo/                   # JSON versionado y fixtures
-│   └── repositories/           # puertos y adaptadores de datos locales
-├── types/                      # entidades, DTO y tipos de UI
-├── lib/                        # utilidades, formato y configuración
 ├── stores/                     # Zustand para estado de interfaz
 ├── styles/                     # tokens y estilos globales Tailwind
 └── main.tsx                    # punto de entrada
@@ -170,9 +175,9 @@ Las reglas compartidas o puramente de dominio irán en `src/types` y `src/lib`; 
 
 La estructura general prevista en el plan inicial (`apps/web`, `apps/desktop`, `apps/mobile` y `packages`) es la evolución posterior del repositorio. No se debe crear artificialmente esa estructura durante Fase 2 porque todavía existe un único cliente web y no hay workspace monorepo.
 
-Cuando se prepare la Fase 3, la aplicación React de la raíz podrá trasladarse a `apps/web` mediante una migración explícita. La aplicación Electron futura será `apps/desktop`, el móvil será `apps/mobile` y los adaptadores SQLite/API se incorporarán en sus respectivos paquetes o aplicaciones. Ese traslado no debe mezclarse con la migración funcional actual.
+Cuando se prepare la Fase 3, `apps/desktop` reutilizará la SPA de `apps/web`, el móvil será `apps/mobile` y los adaptadores SQLite/API se habilitarán en `packages/data-access` o en sus aplicaciones correspondientes. No se requiere trasladar la aplicación web nuevamente.
 
-Durante la Fase 2 se podrán mantener archivos puente temporales, pero cada uno deberá tener una tarea de reemplazo antes del cierre de la fase. No se crearán carpetas `desktop`, `mobile`, `sqlite` ni `api` hasta que comiencen sus planes respectivos. La carpeta `prototipo-react` no se utilizará para implementar funcionalidades nuevas.
+Durante la Fase 2 se podrán mantener archivos puente temporales, pero cada uno deberá tener una tarea de reemplazo antes del cierre de la fase. Se pueden crear las carpetas reservadas para documentar la arquitectura, pero no se implementarán Electron, móvil, SQLite ni API hasta que comiencen sus planes respectivos. La carpeta `prototipo-react` no se utilizará para implementar funcionalidades nuevas.
 
 ## 8. Fases internas de trabajo
 
