@@ -201,7 +201,7 @@ implementada y verificada:
 | [x] | Migrar deudas | `apps/web/src/features/deudas/pages/DebtsPage.tsx`; estados de cuenta, saldos, vencimientos, abono visual y build validados |
 | [x] | Migrar catálogos | `apps/web/src/features/catalogos/pages/CatalogsPage.tsx`; tabs de servicios, productos, categorías y métodos de pago, búsqueda y build validados |
 | [x] | Migrar reportes | `apps/web/src/features/reportes/pages/ReportsPage.tsx`; filtros por tipo/estado, métricas y tabla de resumen con build validado |
-| [ ] | Configurar Vitest y pruebas unitarias | Pendiente |
+| [x] | Configurar Vitest y pruebas unitarias | `apps/web/vitest.config.ts` y prueba de `operationSchema`; `npm run test` validado |
 | [ ] | Configurar Playwright y pruebas E2E | Pendiente |
 | [ ] | Validar accesibilidad, responsive y rendimiento | Pendiente |
 
