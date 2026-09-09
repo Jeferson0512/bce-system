@@ -195,7 +195,7 @@ implementada y verificada:
 | [x] | Crear tipos y adaptador JSON local | `packages/domain/src/index.ts` y `packages/data-access/json/src/demoData.ts`; typecheck/build validados |
 | [x] | Crear componentes UI reutilizables | `apps/web/src/components/ui`, `feedback` y `tables`; typecheck/build validados |
 | [x] | Migrar dashboard | `apps/web/src/pages/DashboardPage.tsx`; typecheck/build validados |
-| [ ] | Migrar operaciones | Pendiente |
+| [x] | Migrar operaciones | `apps/web/src/features/operaciones`; React Hook Form + Zod y typecheck/build validados |
 | [ ] | Migrar kiosco | Pendiente |
 | [ ] | Migrar pagos | Pendiente |
 | [ ] | Migrar deudas | Pendiente |
