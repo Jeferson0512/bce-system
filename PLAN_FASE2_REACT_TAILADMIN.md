@@ -194,7 +194,7 @@ implementada y verificada:
 | [x] | Crear shell visual inicial TailAdmin | `apps/web/src/components/layout/AppLayout.tsx` |
 | [x] | Crear tipos y adaptador JSON local | `packages/domain/src/index.ts` y `packages/data-access/json/src/demoData.ts`; typecheck/build validados |
 | [x] | Crear componentes UI reutilizables | `apps/web/src/components/ui`, `feedback` y `tables`; typecheck/build validados |
-| [ ] | Migrar dashboard | Pendiente |
+| [x] | Migrar dashboard | `apps/web/src/pages/DashboardPage.tsx`; typecheck/build validados |
 | [ ] | Migrar operaciones | Pendiente |
 | [ ] | Migrar kiosco | Pendiente |
 | [ ] | Migrar pagos | Pendiente |
