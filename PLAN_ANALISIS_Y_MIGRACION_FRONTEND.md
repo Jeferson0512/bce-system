@@ -2851,9 +2851,9 @@ v3: misma React SPA empaquetada con Electron
 
 Electron no será un frontend diferente. Será el contenedor de escritorio de la misma aplicación React, evitando duplicar pantallas y lógica visual.
 
-La variante visual principal confirmada es TailAdmin Free. También se construirá una variante comparativa basada en Mantis Free + MUI, reutilizando la misma base React, datos JSON, rutas y lógica. Esta comparación servirá para elegir la experiencia visual definitiva sin modificar la funcionalidad.
+La variante visual definitiva confirmada es TailAdmin Free. La comparación con Mantis/MUI queda cerrada y no forma parte del desarrollo activo.
 
-El prototipo navegable inicial se encuentra en `D:\Trabajos\Propios\bce-system\prototipo-react`. Permite cambiar entre ambas variantes desde el selector `TailAdmin` / `Mantis / MUI` y recorrer los módulos principales con datos demo. Esta carpeta es experimental y no reemplaza todavía la v1 ni constituye la implementación completa de la v2.
+El prototipo navegable inicial se encuentra en `D:\Trabajos\Propios\bce-system\prototipo-react`. Usa TailAdmin Free como única variante activa y permite recorrer los módulos principales con datos demo. Esta carpeta es la base inicial de v2 y todavía no constituye la implementación completa.
 
 ### 22.2. Proyecto backend confirmado para una fase posterior
 
@@ -2888,7 +2888,6 @@ PostgreSQL permanece como alternativa técnica evaluada, pero no como decisión 
 
 Todavía no se han fijado definitivamente:
 
-- Variante visual definitiva después de comparar TailAdmin Free y Mantis Free.
 - Librería final de gráficos.
 - Estrategia exacta de almacenamiento de imágenes.
 - Proveedor de hosting.

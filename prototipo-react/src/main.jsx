@@ -10,12 +10,11 @@ import { navigation } from './config/navigation';
 import { operations, stats } from './data/demoData';
 
 function App() {
-  const [variant, setVariant] = useState('tailadmin');
   const [page, setPage] = useState('dashboard');
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className={`app variant-${variant}`}>
+    <div className="app variant-tailadmin">
       <aside className={`sidebar ${sidebarOpen ? 'is-open' : ''}`}>
         <div className="brand">
           <div className="brand-mark">B</div>
@@ -42,17 +41,13 @@ function App() {
           <button className="icon-button menu-button" onClick={() => setSidebarOpen(true)} aria-label="Abrir menú"><Menu size={21} /></button>
           <div className="breadcrumb"><span>Inicio</span><ChevronDown size={14} /><strong>{navigation.find(item => item.id === page)?.label}</strong></div>
           <div className="top-actions">
-            <div className="variant-switcher">
-              <span>Vista:</span>
-              <button className={variant === 'tailadmin' ? 'selected' : ''} onClick={() => setVariant('tailadmin')}>TailAdmin</button>
-              <button className={variant === 'mantis' ? 'selected' : ''} onClick={() => setVariant('mantis')}>Mantis / MUI</button>
-            </div>
+            <div className="template-label">TailAdmin Free</div>
             <button className="icon-button notification" aria-label="Notificaciones"><Bell size={19} /><i /></button>
             <div className="user-menu"><div className="avatar">JP</div><div className="user-name"><strong>Jeferson</strong><small>Administrador</small></div><ChevronDown size={15} /></div>
           </div>
         </header>
         <div className="content">
-          <div className="prototype-banner"><span className="dot" /> Prototipo visual · <strong>{variant === 'tailadmin' ? 'TailAdmin Free + Tailwind' : 'Mantis Free + MUI'}</strong><span className="banner-note">Mismos datos y funcionalidad para comparar diseño</span></div>
+          <div className="prototype-banner"><span className="dot" /> BCE System v2 · <strong>TailAdmin Free + Tailwind</strong><span className="banner-note">Base oficial de la SPA React</span></div>
           {page === 'dashboard' ? <Dashboard setPage={setPage} /> : <ModulePage page={page} setPage={setPage} />}
         </div>
       </main>
