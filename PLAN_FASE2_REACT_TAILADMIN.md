@@ -240,6 +240,221 @@ completa de la v1 en dominio, repositorio, caso de uso, formulario, detalle y
 pruebas; después se marca `[x]`. Crear una ruta o una pantalla no constituye
 por sí solo una migración.
 
+### 8.2 — Especificación funcional del Dashboard
+
+El Dashboard de Fase 2 no se considerará migrado por tener únicamente una
+ruta, cuatro métricas o una tabla demo. Debe recuperar la estructura de
+información y los cálculos que existen en el Dashboard de la v1, conservando
+la dirección visual TailAdmin de la v2.
+
+#### 8.2.1 — Cabecera
+
+La cabecera debe mostrar:
+
+- Título `Dashboard`.
+- Año activo.
+- Fecha actual.
+- Botón principal `Nueva operación`.
+- Selector de período únicamente si modifica los datos de todo el dashboard.
+
+El botón `Nueva operación` debe navegar al flujo React real de operaciones.
+
+#### 8.2.2 — KPIs de actividad del día
+
+El primer grupo debe titularse `Actividad del día` y contener cuatro cards:
+
+| Card | Cálculo | Acción |
+|---|---|---|
+| Operaciones hoy | Conteo de operaciones cuya fecha corresponde al día actual | Historial filtrado por fecha actual |
+| Copias realizadas | Suma de cantidades de ítems clasificados como copias | Operaciones o reporte filtrado por copias |
+| Impresiones realizadas | Suma de cantidades de ítems clasificados como impresiones | Operaciones o reporte filtrado por impresiones |
+| Servicios especiales | Importe y unidades de anillado, escaneo y plastificado | Reporte diario filtrado por servicios especiales |
+
+Cuando corresponda, los cards deben mostrar comparación contra ayer, por
+ejemplo `+3 vs ayer`. Un card que navega debe tener estado hover/focus,
+etiqueta accesible y comportamiento semántico de enlace o botón.
+
+#### 8.2.3 — KPIs de estado financiero
+
+El segundo grupo debe titularse `Estado financiero` y contener:
+
+| Card | Cálculo | Acción |
+|---|---|---|
+| Cobrado hoy | Suma de pagos recibidos en la fecha actual y cantidad de pagos | Pagos filtrados por fecha |
+| Pendiente profesores | Suma de saldos pendientes de profesores | Deudas de profesores |
+| Profesores con deuda | Conteo de profesores con saldo mayor que cero | Deudas de profesores |
+| Dirección pendiente | Operaciones de dirección menos pagos aplicados | Cuenta de dirección |
+
+Dirección debe mostrar un estado contextual `Pendiente` o `Al día`. Los
+valores no pueden permanecer hardcodeados cuando existan repositorios de
+operaciones, pagos y deudas.
+
+#### 8.2.4 — Card de operaciones recientes
+
+Debe mostrar únicamente las últimas ocho operaciones, ordenadas de forma
+descendente por fecha y hora.
+
+| Columna | Contenido |
+|---|---|
+| Fecha | Fecha y hora de la operación |
+| Solicitante | Profesor, alumno o dirección |
+| Tipo | Badge del tipo de solicitante |
+| Ítems | Cantidad de servicios/productos del pedido |
+| Total | Importe total |
+
+Cada fila debe poder abrir el detalle de la operación. El botón `Ver todo`
+debe navegar al historial. Debe existir estado vacío cuando no haya registros.
+
+#### 8.2.5 — Card de top deudores
+
+Debe mostrar hasta seis deudores ordenados por saldo pendiente descendente.
+Cada fila debe incluir:
+
+- Avatar o iniciales.
+- Nombre.
+- Salón o contexto relacionado.
+- Saldo pendiente.
+- Barra de progreso de pago.
+- Color de riesgo: verde, amarillo o rojo.
+
+`Ver todos` debe abrir el listado de deudas. Cada fila debe poder abrir el
+estado de cuenta individual. Cuando no existan deudas debe aparecer
+`Sin deudas pendientes`.
+
+#### 8.2.6 — Card de servicios del día
+
+Debe ser un gráfico circular tipo doughnut alimentado por cantidades del día.
+Las categorías mínimas son:
+
+- Copia B/N.
+- Impresión B/N.
+- Copia a color.
+- Impresión a color.
+- Anillado.
+- Escaneo.
+- Plastificado.
+
+Debe incluir leyenda, colores consistentes, total de unidades, estado sin
+datos y una alternativa textual accesible. La implementación objetivo es
+Recharts; las barras CSS temporales no cumplen este requisito.
+
+#### 8.2.7 — Card de formas de pago
+
+Debe ser un gráfico circular que agrupe el importe cobrado por:
+
+- Efectivo.
+- Yape.
+- Plin.
+- Transferencia.
+
+Debe mostrar leyenda, total, porcentaje o importe por método, estado vacío y
+acción para abrir pagos filtrados.
+
+#### 8.2.8 — Card de últimos siete días
+
+Debe mostrar la evolución diaria de los últimos siete días con:
+
+- Fecha en el eje X.
+- Importe en soles en el eje Y.
+- Tooltip con fecha y total.
+- Estado sin datos.
+- Fuente común con Reportes.
+
+La primera versión debe mostrar el total generado por día. Podrá añadir una
+segunda serie de total cobrado cuando el repositorio de pagos esté conectado.
+
+#### 8.2.9 — Card de resumen del mes
+
+Debe mostrar:
+
+- Total generado durante el mes.
+- Cantidad de operaciones.
+- Mes y año.
+- Distribución por profesores, alumnos y dirección.
+- Barra de progreso para cada tipo.
+
+El resumen debe calcularse desde las mismas operaciones usadas por el resto de
+la aplicación y no desde constantes independientes.
+
+#### 8.2.10 — Card de accesos rápidos
+
+Debe contener acciones reales, no botones decorativos:
+
+- Nueva operación.
+- Deudas de profesores.
+- Deudas de alumnos.
+- Reporte diario.
+- Reporte por período.
+- Precios.
+
+Cada acceso debe tener icono, texto, navegación a una ruta existente y estados
+hover/focus. Si una ruta aún no existe, debe permanecer identificada como
+pendiente y no presentarse como funcional.
+
+#### 8.2.11 — Contrato común de cards
+
+La implementación debe poder describir cada card con un contrato equivalente
+al siguiente:
+
+```ts
+interface DashboardCardDefinition {
+  id: string;
+  title: string;
+  value?: string;
+  description?: string;
+  tone: 'blue' | 'green' | 'orange' | 'red' | 'purple' | 'slate';
+  interactive: boolean;
+  href?: string;
+  source: string;
+  emptyState?: string;
+}
+```
+
+No todos los cards serán botones:
+
+- Los KPIs con navegación serán interactivos.
+- Las filas de operaciones y deudores serán seleccionables.
+- Los gráficos serán principalmente informativos, con acceso opcional al
+  reporte correspondiente.
+- El resumen mensual será informativo.
+- Los accesos rápidos serán botones de navegación.
+
+#### 8.2.12 — Estructura visual objetivo
+
+```text
+Dashboard
+├── Cabecera + Nueva operación
+├── Actividad del día
+│   ├── Operaciones hoy
+│   ├── Copias realizadas
+│   ├── Impresiones realizadas
+│   └── Servicios especiales
+├── Estado financiero
+│   ├── Cobrado hoy
+│   ├── Pendiente profesores
+│   ├── Profesores con deuda
+│   └── Dirección pendiente
+├── Operaciones recientes + Top deudores
+├── Servicios del día + Formas de pago
+├── Últimos 7 días + Resumen del mes
+└── Accesos rápidos
+```
+
+#### 8.2.13 — Criterios de aceptación del Dashboard
+
+El Dashboard podrá marcarse como `[x]` únicamente cuando:
+
+- Todos los cards definidos estén presentes.
+- Las métricas provengan de repositorios compartidos.
+- Operaciones recientes muestre como máximo ocho filas y cinco columnas.
+- Los top deudores se calculen desde operaciones y pagos.
+- Servicios del día y formas de pago tengan gráficos y estados vacíos.
+- Últimos siete días y resumen mensual compartan fuente con Reportes.
+- Los accesos rápidos naveguen a rutas funcionales.
+- Existan pruebas unitarias para los cálculos principales.
+- Exista una prueba E2E de navegación y consulta del Dashboard.
+- Se valide escritorio, pantalla reducida y navegación por teclado.
+
 ### F2.1 — Fundación técnica
 
 - Convertir el punto de entrada a TypeScript.
@@ -277,14 +492,17 @@ por sí solo una migración.
 
 ### F2.4 — Dashboard
 
-- Indicadores diarios.
-- Gráfico de actividad.
-- Resumen de ingresos.
-- Resumen de deudas.
-- Estado del kiosco.
-- Accesos rápidos.
-- Operaciones recientes.
-- Estados de carga y datos vacíos.
+- Cabecera con año, fecha y acción de nueva operación.
+- KPIs de actividad del día: operaciones, copias, impresiones y servicios especiales.
+- KPIs financieros: cobrado, pendientes de profesores, profesores con deuda y dirección.
+- Operaciones recientes limitadas a ocho registros y cinco columnas.
+- Top deudores con progreso, riesgo y navegación al estado de cuenta.
+- Servicios del día como gráfico doughnut.
+- Formas de pago como gráfico doughnut.
+- Evolución de los últimos siete días.
+- Resumen mensual por tipo de solicitante.
+- Accesos rápidos con navegación funcional.
+- Estados de carga, error, vacío y datos sin resultados.
 
 **Salida:** dashboard funcional con datos demo y navegación a los módulos.
 
