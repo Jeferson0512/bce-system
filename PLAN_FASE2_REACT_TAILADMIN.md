@@ -181,6 +181,33 @@ Durante la Fase 2 se podrán mantener archivos puente temporales, pero cada uno 
 
 ## 8. Fases internas de trabajo
 
+## 8.0. Seguimiento de ejecución
+
+Este recuadro se actualizará únicamente cuando una actividad haya sido
+implementada y verificada:
+
+| Estado | Actividad | Evidencia |
+|---|---|---|
+| [x] | Definir arquitectura de Fase 2 en `apps/web` y `packages` | Sección 7 de este documento |
+| [x] | Crear workspace base y entrada Vite de `apps/web` | Compilación inicial validada |
+| [x] | Configurar React Router con rutas de módulos | `apps/web/src/app/App.tsx` |
+| [x] | Crear shell visual inicial TailAdmin | `apps/web/src/components/layout/AppLayout.tsx` |
+| [x] | Crear tipos y adaptador JSON local | Pendiente |
+| [ ] | Crear componentes UI reutilizables | Pendiente |
+| [ ] | Migrar dashboard | Pendiente |
+| [ ] | Migrar operaciones | Pendiente |
+| [ ] | Migrar kiosco | Pendiente |
+| [ ] | Migrar pagos | Pendiente |
+| [ ] | Migrar deudas | Pendiente |
+| [ ] | Migrar catálogos | Pendiente |
+| [ ] | Migrar reportes | Pendiente |
+| [ ] | Configurar Vitest y pruebas unitarias | Pendiente |
+| [ ] | Configurar Playwright y pruebas E2E | Pendiente |
+| [ ] | Validar accesibilidad, responsive y rendimiento | Pendiente |
+
+No se marcará una actividad como completada solo por crear archivos: debe
+existir una validación reproducible y quedar indicada en la columna Evidencia.
+
 ### F2.1 — Fundación técnica
 
 - Convertir el punto de entrada a TypeScript.
