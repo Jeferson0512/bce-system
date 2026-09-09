@@ -1,5 +1,5 @@
 import { ArrowUpRight, ClipboardList, CreditCard, DollarSign, Package, Plus, Wallet, type LucideIcon } from 'lucide-react';
-import { listDemoOperations } from '../../../../packages/data-access/json/src';
+import { operationRepository } from '../../../../packages/data-access/json/src';
 import { Button } from '../components/ui/Button';
 import { StatusBadge } from '../components/feedback/StatusBadge';
 
@@ -18,7 +18,7 @@ const quickActions: Array<{ label: string; icon: LucideIcon }> = [
 ];
 
 export function DashboardPage() {
-  const operations = listDemoOperations();
+  const operations = operationRepository.list();
   return <><div className="page-heading"><div><p className="eyebrow">MIÉRCOLES, 9 DE SEPTIEMBRE DE 2026</p><h1>¡Buenos días, Jeferson! 👋</h1><p className="muted">Este es el resumen de actividad de BCE System.</p></div><Button><Plus size={17} /> Nueva operación</Button></div>
     <section className="metric-grid">{metrics.map(({ label, value, change, icon: Icon }) => <article className="metric-card" key={label}><div className="metric-icon"><Icon size={19} /></div><span>{label}</span><strong>{value}</strong><small><ArrowUpRight size={12} /> {change}</small></article>)}</section>
     <section className="dashboard-grid"><article className="panel activity-panel"><div className="panel-header"><div><h2>Actividad semanal</h2><p className="muted">Operaciones registradas</p></div><select><option>Esta semana</option><option>Este mes</option></select></div><div className="bar-chart">{weeklyActivity.map((height, index) => <div className="bar-column" key={index}><span className="bar-value">{height}</span><div className="bar" style={{ height: `${height / 2}%` }} /><small>{['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'][index]}</small></div>)}</div></article><article className="panel quick-panel"><div className="panel-header"><div><h2>Accesos rápidos</h2><p className="muted">Tareas frecuentes</p></div></div>{quickActions.map(({ label, icon: Icon }) => <button className="quick-action" key={label}><Icon size={17} /><span>{label}</span><ArrowUpRight size={15} /></button>)}</article></section>

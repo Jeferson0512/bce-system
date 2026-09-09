@@ -197,6 +197,7 @@ implementada y verificada:
 | [x] | Configurar React Router con rutas de módulos | `apps/web/src/app/App.tsx` |
 | [x] | Crear shell visual inicial TailAdmin | `apps/web/src/components/layout/AppLayout.tsx` |
 | [x] | Crear tipos y adaptador JSON local | `packages/domain/src/index.ts` y `packages/data-access/json/src/demoData.ts`; typecheck/build validados |
+| [x] | Crear puerto y repositorio local de operaciones | `packages/application/src/ports/OperationRepository.ts` y `packages/data-access/json/src/operationRepository.ts`; Dashboard y Operaciones consumen el repositorio, pruebas Vitest validadas |
 | [x] | Crear componentes UI reutilizables | `apps/web/src/components/ui`, `feedback` y `tables`; typecheck/build validados |
 | [x] | Migrar dashboard | `apps/web/src/pages/DashboardPage.tsx`; typecheck/build validados |
 | [x] | Migrar operaciones | `apps/web/src/features/operaciones`; React Hook Form + Zod y typecheck/build validados |
