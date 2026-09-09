@@ -192,7 +192,7 @@ implementada y verificada:
 | [x] | Crear workspace base y entrada Vite de `apps/web` | Compilación inicial validada |
 | [x] | Configurar React Router con rutas de módulos | `apps/web/src/app/App.tsx` |
 | [x] | Crear shell visual inicial TailAdmin | `apps/web/src/components/layout/AppLayout.tsx` |
-| [x] | Crear tipos y adaptador JSON local | Pendiente |
+| [ ] | Crear tipos y adaptador JSON local | Pendiente |
 | [ ] | Crear componentes UI reutilizables | Pendiente |
 | [ ] | Migrar dashboard | Pendiente |
 | [ ] | Migrar operaciones | Pendiente |
