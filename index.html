@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BCE System — Bitácora de Copias Escolares</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<!-- SIDEBAR OVERLAY (mobile) -->
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+<!-- ===================== SIDEBAR ===================== -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-badge">BCE</div>
+    <div class="logo-text">
+      <span class="logo-name">BCE System</span>
+      <span class="logo-sub">Bitácora de Copias</span>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav" id="sidebar-nav">
+    <ul>
+      <li><a href="#" class="nav-link" data-route="dashboard">
+        <span class="nav-icon"><i data-lucide="layout-dashboard"></i></span>
+        <span class="nav-label">Dashboard</span>
+      </a></li>
+
+      <li><div class="nav-group-label">Operaciones</div></li>
+      <li><a href="#" class="nav-link" data-route="operaciones/nueva">
+        <span class="nav-icon"><i data-lucide="plus-circle"></i></span>
+        <span class="nav-label">Nueva Operación</span>
+      </a></li>
+      <li><a href="#" class="nav-link" data-route="operaciones/lote">
+        <span class="nav-icon"><i data-lucide="table-2"></i></span>
+        <span class="nav-label">Registro por Lote</span>
+      </a></li>
+      <li><a href="#" class="nav-link" data-route="operaciones/historial">
+        <span class="nav-icon"><i data-lucide="history"></i></span>
+        <span class="nav-label">Historial</span>
+      </a></li>
+
+      <li><div class="nav-group-label">Deudas y Cobros</div></li>
+      <li><a href="#" class="nav-link" data-route="deudas/profesores">
+        <span class="nav-icon"><i data-lucide="graduation-cap"></i></span>
+        <span class="nav-label">Profesores</span>
+      </a></li>
+      <li><a href="#" class="nav-link" data-route="deudas/alumnos">
+        <span class="nav-icon"><i data-lucide="user"></i></span>
+        <span class="nav-label">Alumnos</span>
+      </a></li>
+      <li><a href="#" class="nav-link" data-route="deudas/direccion">
+        <span class="nav-icon"><i data-lucide="building-2"></i></span>
+        <span class="nav-label">Dirección</span>
+      </a></li>
+
+      <li><div class="nav-group-label">Reportes</div></li>
+      <li><a href="#" class="nav-link" data-route="reportes/diario">
+        <span class="nav-icon"><i data-lucide="calendar-days"></i></span>
+        <span class="nav-label">Reporte Diario</span>
+      </a></li>
+      <li><a href="#" class="nav-link" data-route="reportes/periodo">
+        <span class="nav-icon"><i data-lucide="bar-chart-3"></i></span>
+        <span class="nav-label">Por Período</span>
+      </a></li>
+
+      <li><div class="nav-group-label">Catálogos</div></li>
+      <li><a href="#" class="nav-link" data-route="catalogos/salones">
+        <span class="nav-icon"><i data-lucide="school"></i></span>
+        <span class="nav-label">Salones</span>
+      </a></li>
+      <li><a href="#" class="nav-link" data-route="catalogos/personal">
+        <span class="nav-icon"><i data-lucide="users-2"></i></span>
+        <span class="nav-label">Personal</span>
+      </a></li>
+      <li><a href="#" class="nav-link" data-route="catalogos/profesores">
+        <span class="nav-icon"><i data-lucide="users"></i></span>
+        <span class="nav-label">Profesores</span>
+      </a></li>
+      <li><a href="#" class="nav-link" data-route="catalogos/alumnos">
+        <span class="nav-icon"><i data-lucide="user-check"></i></span>
+        <span class="nav-label">Alumnos</span>
+      </a></li>
+      <li><a href="#" class="nav-link" data-route="catalogos/usuarios">
+        <span class="nav-icon"><i data-lucide="shield-user"></i></span>
+        <span class="nav-label">Usuarios</span>
+      </a></li>
+
+      <li><div class="nav-group-label">Configuración</div></li>
+      <li><a href="#" class="nav-link" data-route="config/precios">
+        <span class="nav-icon"><i data-lucide="tag"></i></span>
+        <span class="nav-label">Precios</span>
+      </a></li>
+      <li><a href="#" class="nav-link" data-route="config/sistema">
+        <span class="nav-icon"><i data-lucide="settings"></i></span>
+        <span class="nav-label">Sistema</span>
+      </a></li>
+    </ul>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="sidebar-user">
+      <div class="sidebar-avatar av-blue">MG</div>
+      <div class="sidebar-user-info">
+        <span class="sidebar-user-name">María García</span>
+        <span class="sidebar-user-role">Administradora</span>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- ===================== MAIN WRAPPER ===================== -->
+<div class="main-wrapper" id="main-wrapper">
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="navbar-left">
+      <button class="btn-icon" id="sidebar-toggle" title="Colapsar sidebar">
+        <i data-lucide="menu"></i>
+      </button>
+      <div class="breadcrumb" id="breadcrumb">Dashboard</div>
+    </div>
+
+    <div class="navbar-right">
+      <!-- Year Selector -->
+      <div class="year-select-wrap">
+        <i data-lucide="calendar"></i>
+        <select id="year-select" onchange="BCE.setYear(this.value)">
+          <option value="2026">Año 2026</option>
+          <option value="2025">Año 2025</option>
+          <option value="2024">Año 2024</option>
+        </select>
+      </div>
+
+      <!-- Quick action -->
+      <button class="btn btn-primary btn-sm" onclick="BCE.navigate('operaciones/nueva')">
+        <i data-lucide="plus"></i>
+        <span>Nueva Operación</span>
+      </button>
+
+      <!-- Bell -->
+      <button class="btn-icon" title="Notificaciones">
+        <i data-lucide="bell"></i>
+        <span class="badge-dot"></span>
+      </button>
+
+      <!-- User dropdown -->
+      <div class="user-menu" id="user-menu">
+        <button class="user-trigger" id="user-trigger">
+          <div class="user-avatar av-blue">MG</div>
+          <div class="user-meta">
+            <span class="user-name">María García</span>
+            <span class="user-role">Administradora</span>
+          </div>
+          <i data-lucide="chevron-down" class="chevron-icon"></i>
+        </button>
+        <div class="dropdown-menu" id="user-dropdown">
+          <div class="dropdown-header">
+            <div class="user-avatar av-blue avatar-md">MG</div>
+            <div>
+              <div class="dropdown-user-name">María García</div>
+              <div class="dropdown-user-email">maria@colegio.edu.pe</div>
+            </div>
+          </div>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item" onclick="return false">
+            <i data-lucide="user-circle"></i> Mi Perfil
+          </a>
+          <a href="#" class="dropdown-item" onclick="BCE.navigate('config/sistema'); return false;">
+            <i data-lucide="settings"></i> Configuración
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item dropdown-item-danger" onclick="return false">
+            <i data-lucide="log-out"></i> Cerrar Sesión
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- PAGE CONTENT -->
+  <main class="content" id="content">
+    <!-- Views rendered by JS -->
+  </main>
+</div>
+
+<!-- TOAST CONTAINER -->
+<div class="toast-wrap" id="toast-wrap"></div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="BCE.closeModal(event)">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <h3 class="modal-title" id="modal-title">Modal</h3>
+      <button class="btn-icon" onclick="BCE.closeModal()"><i data-lucide="x"></i></button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-footer" id="modal-footer"></div>
+  </div>
+</div>
+
+<!-- CONFIRM DIALOG -->
+<div class="confirm-overlay" id="confirm-overlay">
+  <div class="confirm-dialog">
+    <div class="confirm-icon" id="confirm-icon">
+      <i data-lucide="alert-triangle"></i>
+    </div>
+    <h3 class="confirm-title" id="confirm-title"></h3>
+    <p class="confirm-message" id="confirm-message"></p>
+    <div class="confirm-actions">
+      <button class="btn btn-secondary" id="confirm-cancel-btn">Cancelar</button>
+      <button class="btn btn-danger" id="confirm-ok-btn">Confirmar</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/db.js"></script>
+<script src="js/helpers.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/views/dashboard.js"></script>
+<script src="js/views/operaciones.js"></script>
+<script src="js/views/historial.js"></script>
+<script src="js/views/deudas.js"></script>
+<script src="js/views/lote.js"></script>
+<script src="js/views/folletos.js"></script>
+<script src="js/views/reportes.js"></script>
+<script src="js/views/catalogos.js"></script>
+<script src="js/views/config.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
